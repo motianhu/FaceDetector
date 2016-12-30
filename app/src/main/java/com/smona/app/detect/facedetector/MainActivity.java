@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFaceView = (FaceView) findViewById(R.id.faceOverlay);
         mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
+        initDecorate();
+
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
@@ -82,6 +84,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // on very small images.  This will be fixed in a future release.  But in the near term, use
         // of the SafeFaceDetector class will patch the issue.
         mSafeDetector = new SafeFaceDetector(mDetector);
+
+
+    }
+
+    private void initDecorate() {
+        Bitmap header = PathReader.getImageFromAssetsFile(this, "header.png");
+        mFaceView.setHeaderBitmap(header);
+        Bitmap leftFace = PathReader.getImageFromAssetsFile(this, "left_face.png");
+        mFaceView.setLeftBitmap(leftFace);
+        Bitmap rightFace = PathReader.getImageFromAssetsFile(this, "right_face.png");
+        mFaceView.setRightBitmap(rightFace);
     }
 
     private void requestCameraPermission() {
