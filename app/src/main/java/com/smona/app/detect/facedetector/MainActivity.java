@@ -3,6 +3,7 @@ package com.smona.app.detect.facedetector;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -22,15 +23,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.MultiProcessor;
-import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.google.android.gms.vision.Frame;
+import com.smona.app.detect.facedetector.detector.SafeFaceDetector;
+import com.smona.app.detect.facedetector.view.FaceView;
+import com.smona.app.detect.facedetector.util.PathReader;
+import com.smona.app.detect.facedetector.util.FaceUtil;
 
 
 import java.io.File;
@@ -61,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFaceView = (FaceView) findViewById(R.id.faceOverlay);
         mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
-        initDecorate();
+        printGMS();
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -72,6 +77,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             requestCameraPermission();
         }
 
+
+        initDecorate();
+    }
+
+    private void printGMS() {
+        GoogleApiAvailability googAvail = GoogleApiAvailability.getInstance();
+        int status = googAvail.isGooglePlayServicesAvailable(this);
+        isGooglePlayInstalled();
+    }
+
+    private boolean isGooglePlayInstalled() {
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (status == ConnectionResult.SUCCESS) {
+            return true;
+        } else {
+            ((Dialog) GooglePlayServicesUtil.getErrorDialog(status, this, 10)).show();
+        }
+        return false;
     }
 
     private void initFaceDetector() {
@@ -95,6 +118,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFaceView.setLeftBitmap(leftFace);
         Bitmap rightFace = PathReader.getImageFromAssetsFile(this, "right_face.png");
         mFaceView.setRightBitmap(rightFace);
+
+        //mImage = PathReader.getImageFromSdcard(this, "/sdcard/source.jpg");
+        mImage =  PathReader.getImageFromAssetsFile(this, "source.jpg");
+        detectorFace();
     }
 
     private void requestCameraPermission() {
@@ -153,13 +180,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void detectorFace() {
         if (null != mImage) {
             //处理图片
-            Log.d("moth", "mDetector.isOperational()=" + mDetector.isOperational());
             if (!mDetector.isOperational()) {
                 //Handle contingency
             } else {
                 Frame frame = new Frame.Builder().setBitmap(mImage).build();
                 SparseArray<Face> faces = mSafeDetector.detect(frame);
-                Log.d("moth", "mSafeDetector.isOperational()=" + mSafeDetector.isOperational());
                 if (!mSafeDetector.isOperational()) {
                     // Note: The first time that an app using face API is installed on a device, GMS will
                     // download a native library to the device in order to do detection.  Usually this

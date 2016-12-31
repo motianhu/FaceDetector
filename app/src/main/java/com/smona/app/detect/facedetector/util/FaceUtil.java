@@ -1,14 +1,10 @@
-package com.smona.app.detect.facedetector;
+package com.smona.app.detect.facedetector.util;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.ExifInterface;

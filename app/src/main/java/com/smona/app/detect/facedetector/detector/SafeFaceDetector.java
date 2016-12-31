@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.smona.app.detect.facedetector;
+package com.smona.app.detect.facedetector.detector;
 
 import android.graphics.ImageFormat;
 import android.util.Log;

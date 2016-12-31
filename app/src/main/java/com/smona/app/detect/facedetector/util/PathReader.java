@@ -1,4 +1,4 @@
-package com.smona.app.detect.facedetector;
+package com.smona.app.detect.facedetector.util;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -27,5 +27,10 @@ public class PathReader {
 
         return image;
 
+    }
+
+    public static Bitmap getImageFromSdcard(Context context, String filePath) {
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        return bitmap;
     }
 }

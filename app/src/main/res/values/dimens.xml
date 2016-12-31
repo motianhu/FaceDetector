@@ -3,5 +3,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <integer name="google_play_services_version">9452000</integer>
+    <integer name="google_play_services_version">10084000</integer>
 </resources>
